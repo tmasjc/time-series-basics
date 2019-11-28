@@ -27,7 +27,7 @@ pm25 <- raw %>%
     group_by(datetime) %>% 
     summarise(value = mean(pm2_5, na.rm = TRUE)) %$% 
     xts(.$value, order.by = .$datetime)
-names(pm25) <- "value"
+names(pm25) <- "pm25"
 
 # fill missing values
 pm25 <- na.locf(pm25)
@@ -44,7 +44,7 @@ autoplot(pm25)
 
 # full customization
 pm25 %>% 
-    ggplot(aes(Index, value)) + 
+    ggplot(aes(Index, pm25)) + 
     geom_line(col = "navyblue") + 
     geom_smooth(se = FALSE, col = "red") + 
     scale_x_datetime(date_breaks = "3 months", date_labels = "%b %y") +
@@ -66,7 +66,7 @@ monthly_mu <- period.apply(pm25, INDEX = ep, FUN = mean)
 indexFormat(monthly_mu) <- "%B %Y"
 
 (p <- monthly_mu %>% 
-    ggplot(aes(Index, value)) + 
+    ggplot(aes(Index, pm25)) + 
     geom_line(col = "dodgerblue", alpha = .7) + 
     geom_point(col = "navyblue") + 
     labs(title = "Monthly Average from 2013 to 2017"))
@@ -77,6 +77,7 @@ p + geom_vline(xintercept = index(pks), lty = 3, col = "salmon")
     
 
 # Transform Data ----------------------------------------------------------
+
 
 # specify which @year which @month
 get_core <- function(y, m) {
@@ -101,7 +102,7 @@ monthly_wide %>%
 monthly_mu %>% 
     ggplot(aes(
         x   = year(Index),
-        y   = value,
+        y   = pm25,
         col = factor(month(Index))
     )) + 
     geom_line() + 
@@ -110,5 +111,39 @@ monthly_mu %>%
     theme_minimal(base_family = "Menlo") + 
     labs(x = "", y = "", title = "PM25 by Month (March 2013 - March 2017)")
 
-    
-    
+
+# Basic Decomposition ---------------------------------------------------
+
+windspeed <- raw %>% 
+    group_by(datetime) %>% 
+    summarise(value = mean(wspm, na.rm = TRUE)) %$%
+    xts(.$value, order.by = .$datetime)
+
+wspm25 <- merge(pm25, windspeed, join = "left")
+
+# a quick scatter point   
+qplot(
+    x = windspeed,
+    y = pm25,
+    data = as.data.frame(wspm25),
+    alpha = .3
+) +
+    geom_smooth(method = "lm", se = FALSE) + 
+    scale_alpha_continuous(guide = "none") +
+    labs(x = "Windspeed", title = "PM25") + 
+    theme_minimal(base_family = "Menlo")
+
+ep    <- endpoints(wspm25, "months")
+wspmu <- wspm25$windspeed %>% 
+    period.apply(INDEX = ep, FUN = mean) %>% 
+    na.locf()
+plot(wspmu)
+
+# moving average to reduce noise
+wspmu_smoothed  <- rollapply(wspmu, width = 3, FUN = mean)
+# or using forecast package
+# wspmu_smoothed <- forecast::ma(wspmu, order = 3)
+
+# detect seasonality using autocorrelation
+plot(wspmu_smoothed)
+forecast::ggAcf(wspmu_smoothed) + labs(title = "Windspeed Correlogram")
