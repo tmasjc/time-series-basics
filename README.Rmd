@@ -252,3 +252,10 @@ The blue lines incidicates ±2/√T, representing white noise.
 forecast::ggAcf(wspmu) + labs(title = "Correlogram - Windspeed")
 ```
 
+
+## Session Info 
+
+```{r, echo=FALSE}
+sessionInfo()
+```
+

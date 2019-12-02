@@ -333,3 +333,45 @@ forecast::ggAcf(wspmu) + labs(title = "Correlogram - Windspeed")
 ```
 
 ![](README_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
+
+## Session Info
+
+    ## R version 3.6.1 (2019-07-05)
+    ## Platform: x86_64-apple-darwin15.6.0 (64-bit)
+    ## Running under: macOS Mojave 10.14
+    ## 
+    ## Matrix products: default
+    ## BLAS:   /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRblas.0.dylib
+    ## LAPACK: /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRlapack.dylib
+    ## 
+    ## locale:
+    ## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+    ## 
+    ## attached base packages:
+    ## [1] stats     graphics  grDevices utils     datasets  methods   base     
+    ## 
+    ## other attached packages:
+    ##  [1] forecast_8.9    quantmod_0.4-15 TTR_0.23-5      lubridate_1.7.4
+    ##  [5] xts_0.11-2      zoo_1.8-6       glue_1.3.1      janitor_1.2.0  
+    ##  [9] magrittr_1.5    ggthemes_4.2.0  ggfortify_0.4.8 forcats_0.4.0  
+    ## [13] stringr_1.4.0   dplyr_0.8.3     purrr_0.3.3     readr_1.3.1    
+    ## [17] tidyr_1.0.0     tibble_2.1.3    ggplot2_3.2.1   tidyverse_1.3.0
+    ## 
+    ## loaded via a namespace (and not attached):
+    ##  [1] tseries_0.10-47    httr_1.4.1         jsonlite_1.6       splines_3.6.1     
+    ##  [5] modelr_0.1.5       assertthat_0.2.1   cellranger_1.1.0   yaml_2.2.0        
+    ##  [9] pillar_1.4.2       backports_1.1.5    lattice_0.20-38    quadprog_1.5-8    
+    ## [13] digest_0.6.23      RColorBrewer_1.1-2 rvest_0.3.5        snakecase_0.11.0  
+    ## [17] colorspace_1.4-1   htmltools_0.4.0    Matrix_1.2-17      timeDate_3043.102 
+    ## [21] pkgconfig_2.0.3    broom_0.5.2        haven_2.2.0        scales_1.1.0      
+    ## [25] mgcv_1.8-28        generics_0.0.2     farver_2.0.1       ellipsis_0.3.0    
+    ## [29] withr_2.1.2        urca_1.3-0         nnet_7.3-12        lazyeval_0.2.2    
+    ## [33] cli_1.1.0          crayon_1.3.4       readxl_1.3.1       evaluate_0.14     
+    ## [37] fs_1.3.1           nlme_3.1-140       xml2_1.2.2         tools_3.6.1       
+    ## [41] hms_0.5.2          lifecycle_0.1.0    munsell_0.5.0      reprex_0.3.0      
+    ## [45] compiler_3.6.1     rlang_0.4.2        grid_3.6.1         rstudioapi_0.10   
+    ## [49] labeling_0.3       rmarkdown_1.17     gtable_0.3.0       fracdiff_1.4-2    
+    ## [53] DBI_1.0.0          curl_4.2           R6_2.4.1           gridExtra_2.3     
+    ## [57] knitr_1.26         zeallot_0.1.0      stringi_1.4.3      parallel_3.6.1    
+    ## [61] Rcpp_1.0.3         vctrs_0.2.0        dbplyr_1.4.2       tidyselect_0.2.5  
+    ## [65] xfun_0.11          lmtest_0.9-37
