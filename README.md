@@ -326,7 +326,8 @@ positive. When data are seasonal, the autocorrelations will be larger
 for the seasonal lags (at multiples of the seasonal frequency) than for
 other lags.
 
-The blue lines incidicates ±2/√T, representing white noise.
+The blue lines incidicates ±2/√T, where T is the length of series,
+representing white noise.
 
 ``` r
 forecast::ggAcf(wspmu) + labs(title = "Correlogram - Windspeed")
