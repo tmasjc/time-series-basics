@@ -182,9 +182,7 @@ bi_week_range %>%
     ggplot(aes(week, val, col = var, group = week)) +
     geom_line(col = "lightgray") +
     geom_point() + 
-    scale_color_brewer(guide = "none",
-                       direction = -1,
-                       palette = "Set1") + 
+    scale_color_brewer(guide = "none", palette = "Set1") + 
     labs(title = "Bi-Weekly 50-90 Quantile, PM25")
 ```
 
@@ -210,28 +208,23 @@ monthly_wide <- map(1:12, ~ map2_dbl(.x, yr, ~ get_core(..2, ..1))) %>%
     map(~ ts(., start = min(yr), end = max(yr), frequency = 1)) %>% 
     set_names(month.abb) %>% 
     do.call(cbind, .)
-monthly_wide
+
+# stil a time series
+monthly_wide[, c('Dec', 'Jan', 'Feb')]
 ```
 
     ## Time Series:
     ## Start = 2013 
     ## End = 2017 
     ## Frequency = 1 
-    ##            Jan       Feb       Mar      Apr      May       Jun      Jul
-    ## 2013        NA        NA 104.71906 62.22600 81.53193 102.14312 67.68538
-    ## 2014  97.93781 153.70431  95.30729 90.69111 62.04569  54.43935 89.91680
-    ## 2015  96.29138  93.23196  86.29003 71.04736 55.62051  60.75577 60.93247
-    ## 2016  66.87994  42.83319  91.75813 67.05101 53.59896  58.51604 68.23572
-    ## 2017 113.95358  68.67326        NA       NA       NA        NA       NA
-    ##           Aug      Sep       Oct       Nov       Dec
-    ## 2013 60.87607 76.25218  91.69247  73.83220  78.33322
-    ## 2014 63.00928 65.81218 119.55397  87.11115  59.51845
-    ## 2015 44.47829 48.81169  72.10920 114.82227 149.55659
-    ## 2016 45.87336 53.42565  84.10155  97.49787 128.72614
-    ## 2017       NA       NA        NA        NA        NA
+    ##            Dec       Jan       Feb
+    ## 2013  78.33322        NA        NA
+    ## 2014  59.51845  97.93781 153.70431
+    ## 2015 149.55659  96.29138  93.23196
+    ## 2016 128.72614  66.87994  42.83319
+    ## 2017        NA 113.95358  68.67326
 
 ``` r
-# stil a time series
 monthly_wide %>% 
     autoplot(facets = FALSE) +
     scale_color_brewer(palette = "Paired")
@@ -299,7 +292,7 @@ ep    <- endpoints(wspm25, "months")
 wspmu <- wspm25$windspeed %>% 
     period.apply(INDEX = ep, FUN = mean) %>% 
     na.locf()
-plot(wspmu)
+plot(wspmu, main = "Windspeed")
 ```
 
 ![](README_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
@@ -314,7 +307,7 @@ wspmu_smoothed  <- rollapply(wspmu, width = 3, FUN = mean)
 # wspmu_smoothed <- forecast::ma(wspmu, order = 3)
 
 # detect seasonality using autocorrelation
-plot(wspmu_smoothed)
+plot(wspmu_smoothed, main = "Windspeed (Smoothed)")
 ```
 
 ![](README_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
@@ -324,7 +317,8 @@ Autocorrelation `stats::acf` gives us a clearer understanding. When data
 have a trend, the autocorrelations for small lags tend to be large and
 positive. When data are seasonal, the autocorrelations will be larger
 for the seasonal lags (at multiples of the seasonal frequency) than for
-other lags.
+other lags. What if a series embeds both trend and seasonality? How do
+the autocorrelations look like?
 
 The blue lines incidicates ±2/√T, where T is the length of series,
 representing white noise.

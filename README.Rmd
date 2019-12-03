@@ -147,9 +147,7 @@ bi_week_range %>%
     ggplot(aes(week, val, col = var, group = week)) +
     geom_line(col = "lightgray") +
     geom_point() + 
-    scale_color_brewer(guide = "none",
-                       direction = -1,
-                       palette = "Set1") + 
+    scale_color_brewer(guide = "none", palette = "Set1") + 
     labs(title = "Bi-Weekly 50-90 Quantile, PM25")
 ```
 
@@ -171,9 +169,10 @@ monthly_wide <- map(1:12, ~ map2_dbl(.x, yr, ~ get_core(..2, ..1))) %>%
     map(~ ts(., start = min(yr), end = max(yr), frequency = 1)) %>% 
     set_names(month.abb) %>% 
     do.call(cbind, .)
-monthly_wide
 
 # stil a time series
+monthly_wide[, c('Dec', 'Jan', 'Feb')]
+
 monthly_wide %>% 
     autoplot(facets = FALSE) +
     scale_color_brewer(palette = "Paired")
@@ -229,7 +228,7 @@ ep    <- endpoints(wspm25, "months")
 wspmu <- wspm25$windspeed %>% 
     period.apply(INDEX = ep, FUN = mean) %>% 
     na.locf()
-plot(wspmu)
+plot(wspmu, main = "Windspeed")
 ```
 
 The plot above does not make it obvious. We can reduce noise by applying moving average smoothing.
@@ -241,10 +240,10 @@ wspmu_smoothed  <- rollapply(wspmu, width = 3, FUN = mean)
 # wspmu_smoothed <- forecast::ma(wspmu, order = 3)
 
 # detect seasonality using autocorrelation
-plot(wspmu_smoothed)
+plot(wspmu_smoothed, main = "Windspeed (Smoothed)")
 ```
 
-There you notice the seasonality and upward moving trend. Autocorrelation `stats::acf` gives us a clearer understanding. When data have a trend, the autocorrelations for small lags tend to be large and positive. When data are seasonal, the autocorrelations will be larger for the seasonal lags (at multiples of the seasonal frequency) than for other lags.
+There you notice the seasonality and upward moving trend. Autocorrelation `stats::acf` gives us a clearer understanding. When data have a trend, the autocorrelations for small lags tend to be large and positive. When data are seasonal, the autocorrelations will be larger for the seasonal lags (at multiples of the seasonal frequency) than for other lags. What if a series embeds both trend and seasonality? How do the autocorrelations look like?
 
 The blue lines incidicates ±2/√T, where T is the length of series, representing white noise.
 
